@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-AppBar newLangDiDaAppBar(String title) {
+import '../features/settings/settings.dart';
+
+AppBar newLangDiDaAppBar(String title, BuildContext context) {
   return AppBar(
     backgroundColor: const Color.fromARGB(255, 228, 221, 239),
     title: Text(title),
-    // buttons redirect to different pages (Reading, Reviewing, Logs, and Settings)
+    // buttons redirect to different pages (Reading, Reviewing, Uploading, Logs, and Settings)
     bottom: PreferredSize(
       preferredSize: const Size.fromHeight(50),
       child: Row(
@@ -12,28 +14,37 @@ AppBar newLangDiDaAppBar(String title) {
           Expanded(
             child: IconButton(
               icon: const Icon(Icons.book),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           ),
           Expanded(
             child: IconButton(
               icon: const Icon(Icons.bookmark),
-              onPressed: () {
-              },
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: IconButton(
+              icon: const Icon(Icons.upload),
+              onPressed: () {},
             ),
           ),
           Expanded(
             child: IconButton(
               icon: const Icon(Icons.history),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           ),
           Expanded(
             child: IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SettingsPage(
+                              key: UniqueKey(),
+                            )));
               },
             ),
           ),

@@ -62,7 +62,7 @@ class EntryPageState extends State<EntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: newLangDiDaAppBar("connect to server"),
+      appBar: newLangDiDaAppBar("connect to server", context),
       body: Center(
         child: _isLoading
             ? const CircularProgressIndicator()

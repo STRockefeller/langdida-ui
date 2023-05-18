@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/features/entry_page/entry_page.dart';
+import 'package:get_storage/get_storage.dart';
 
-void main() {
+void main() async{
+  await GetStorage.init();
+  final box = GetStorage();
+  box.listenKey("server_address", (value) {
+    print("server_address changed to $value");
+  });
   runApp(const MyApp());
 }
 
