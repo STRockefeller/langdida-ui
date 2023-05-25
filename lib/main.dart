@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/features/entry_page/entry_page.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 
-void main() async{
+void main() async {
   await GetStorage.init();
   final box = GetStorage();
   box.listenKey("server_address", (value) {
@@ -17,10 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: FlexThemeData.light(scheme: FlexScheme.deepPurple),
+      // The Mandy red, dark theme.
+      darkTheme: FlexThemeData.dark(scheme: FlexScheme.deepPurple),
+      themeMode: ThemeMode.system,
       home: const EntryPage(key: Key('entry_page')),
     );
   }
