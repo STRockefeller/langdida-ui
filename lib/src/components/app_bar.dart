@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:langdida_ui/src/features/book/book.dart';
+import 'package:langdida_ui/src/features/upload/upload.dart';
 
 import '../features/settings/settings.dart';
 
 AppBar newLangDiDaAppBar(String title, BuildContext context) {
   return AppBar(
-    backgroundColor: const Color.fromARGB(255, 228, 221, 239),
     title: Text(title),
     // buttons redirect to different pages (Reading, Reviewing, Uploading, Logs, and Settings)
     bottom: PreferredSize(
@@ -14,7 +15,14 @@ AppBar newLangDiDaAppBar(String title, BuildContext context) {
           Expanded(
             child: IconButton(
               icon: const Icon(Icons.book),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BookPage(
+                              key: UniqueKey(),
+                            )));
+              },
             ),
           ),
           Expanded(
@@ -26,7 +34,14 @@ AppBar newLangDiDaAppBar(String title, BuildContext context) {
           Expanded(
             child: IconButton(
               icon: const Icon(Icons.upload),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UploadPage(
+                              key: UniqueKey(),
+                            )));
+              },
             ),
           ),
           Expanded(
