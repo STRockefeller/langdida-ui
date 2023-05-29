@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:langdida_ui/src/components/app_bar.dart';
 import 'package:langdida_ui/src/components/flash_message.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:langdida_ui/src/features/book/book.dart';
+import 'package:langdida_ui/src/features/upload/open_book_dialog.dart';
 
 class UploadPage extends StatefulWidget {
   const UploadPage({Key? key}) : super(key: key);
@@ -60,14 +60,12 @@ class _UploadPageState extends State<UploadPage> {
   }
 
   void _openBook(String contents) {
-    final GetStorage _storage = GetStorage();
-    _storage.write("book", _fileContent);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BookPage(
-                  key: UniqueKey(),
-                )));
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OpenBookDialog(_fileContent, key: UniqueKey());
+      },
+    );
   }
 
   @override
