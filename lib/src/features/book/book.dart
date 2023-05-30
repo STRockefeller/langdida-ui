@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:langdida_ui/src/components/app_bar.dart';
+import 'package:langdida_ui/src/features/book/word_dialog.dart';
 
 class BookPage extends StatelessWidget {
   BookPage({Key? key}) : super(key: key);
@@ -32,20 +33,7 @@ class BookPage extends StatelessWidget {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(_controller.text),
-                content:
-                    // todo : show the vocabulary card
-                    const Text("Some content related to the selected text."),
-                actions: [
-                  TextButton(
-                    child: const Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
+              return WordDialog(_controller.text);
             },
           );
         },

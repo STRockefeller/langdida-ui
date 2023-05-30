@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:langdida_ui/src/features/book/book.dart';
 
@@ -8,14 +7,14 @@ class OpenBookDialog extends StatefulWidget {
   const OpenBookDialog(this._fileContent, {super.key});
 
   @override
-  _OpenBookDialogState createState() => _OpenBookDialogState();
+  State<OpenBookDialog> createState() => _OpenBookDialogState();
 }
 
 class _OpenBookDialogState extends State<OpenBookDialog> {
   final GetStorage _storage = GetStorage();
   String _selectedLanguage = "";
-  _OpenBookDialogState() : super(){
-    _selectedLanguage = _storage.read("language")??"en";
+  _OpenBookDialogState() : super() {
+    _selectedLanguage = _storage.read("language") ?? "en";
   }
 
   @override
