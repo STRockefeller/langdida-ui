@@ -38,10 +38,22 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
     setState(() {});
   }
 
+  void removeExplanation(int index) {
+    widget._resp.explanations.removeAt(index);
+    explanationsControllers.removeAt(index);
+    setState(() {});
+  }
+
   void addSentence() {
     const initialContent = "new sentence";
     widget._resp.exampleSentences.add(initialContent);
     sentencesControllers.add(TextEditingController(text: initialContent));
+    setState(() {});
+  }
+
+  void removeSentence(int index) {
+    widget._resp.exampleSentences.removeAt(index);
+    sentencesControllers.removeAt(index);
     setState(() {});
   }
 
@@ -50,6 +62,23 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
     widget._resp.labels.add(initialContent);
     labelsControllers.add(TextEditingController(text: initialContent));
     setState(() {});
+  }
+
+  void removeLabel(int index) {
+    widget._resp.labels.removeAt(index);
+    labelsControllers.removeAt(index);
+    setState(() {});
+  }
+
+  Widget appendTextFieldButton(void Function()? onPressed) {
+    return SizedBox(
+      height: 25,
+      width: 25,
+      child: FloatingActionButton(
+        onPressed: onPressed,
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 
   @override
@@ -81,17 +110,24 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
           body: Column(
             children: [
               for (int i = 0; i < labelsControllers.length; i++)
-                TextField(
-                  controller: labelsControllers[i],
-                  onChanged: (value) {
-                    widget._resp.labels[i] = value;
-                    widget.onValueChanged(widget._resp);
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: labelsControllers[i],
+                        onChanged: (value) {
+                          widget._resp.labels[i] = value;
+                          widget.onValueChanged(widget._resp);
+                        },
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () => removeLabel(i),
+                        iconSize: 20,
+                        icon: const Icon(Icons.delete))
+                  ],
                 ),
-              FloatingActionButton(
-                onPressed: addLabel,
-                child: const Icon(Icons.add),
-              ),
+              appendTextFieldButton(addLabel),
             ],
           ),
           isExpanded: _isExpandedList[1],
@@ -103,17 +139,24 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
           body: Column(
             children: [
               for (int i = 0; i < explanationsControllers.length; i++)
-                TextField(
-                  controller: explanationsControllers[i],
-                  onChanged: (value) {
-                    widget._resp.explanations[i] = value;
-                    widget.onValueChanged(widget._resp);
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: explanationsControllers[i],
+                        onChanged: (value) {
+                          widget._resp.explanations[i] = value;
+                          widget.onValueChanged(widget._resp);
+                        },
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () => removeExplanation(i),
+                        iconSize: 20,
+                        icon: const Icon(Icons.delete))
+                  ],
                 ),
-              FloatingActionButton(
-                onPressed: addExplanation,
-                child: const Icon(Icons.add),
-              ),
+              appendTextFieldButton(addExplanation),
             ],
           ),
           isExpanded: _isExpandedList[2],
@@ -125,17 +168,24 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
           body: Column(
             children: [
               for (int i = 0; i < sentencesControllers.length; i++)
-                TextField(
-                  controller: sentencesControllers[i],
-                  onChanged: (value) {
-                    widget._resp.exampleSentences[i] = value;
-                    widget.onValueChanged(widget._resp);
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: sentencesControllers[i],
+                        onChanged: (value) {
+                          widget._resp.exampleSentences[i] = value;
+                          widget.onValueChanged(widget._resp);
+                        },
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () => removeSentence(i),
+                        iconSize: 20,
+                        icon: const Icon(Icons.delete))
+                  ],
                 ),
-              FloatingActionButton(
-                onPressed: addSentence,
-                child: const Icon(Icons.add),
-              ),
+              appendTextFieldButton(addSentence),
             ],
           ),
           isExpanded: _isExpandedList[3],
