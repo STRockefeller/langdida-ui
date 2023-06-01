@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 
 class CardExpansionPanelList extends StatefulWidget {
-  final GetCardResponse _resp;
-  const CardExpansionPanelList(this._resp, {super.key});
+  final CardModel _resp;
+  final Function(CardModel newResponse) onValueChanged;
+  const CardExpansionPanelList(this._resp, this.onValueChanged, {super.key});
 
   @override
   State<CardExpansionPanelList> createState() => _CardExpansionPanelListState();
@@ -57,9 +58,16 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
             return const ListTile(title: Text("labels"));
           },
           body: Column(
-            children: labelsControllers
-                .map((controller) => TextField(controller: controller))
-                .toList(),
+            children: [
+              for (int i = 0; i < labelsControllers.length; i++)
+                TextField(
+                  controller: labelsControllers[i],
+                  onChanged: (value) {
+                    widget._resp.labels[i] = value;
+                    widget.onValueChanged(widget._resp);
+                  },
+                ),
+            ],
           ),
           isExpanded: _isExpandedList[1],
         ),
@@ -68,9 +76,16 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
             return const ListTile(title: Text("explanations"));
           },
           body: Column(
-            children: explanationsControllers
-                .map((controller) => TextField(controller: controller))
-                .toList(),
+            children: [
+              for (int i = 0; i < explanationsControllers.length; i++)
+                TextField(
+                  controller: explanationsControllers[i],
+                  onChanged: (value) {
+                    widget._resp.explanations[i] = value;
+                    widget.onValueChanged(widget._resp);
+                  },
+                ),
+            ],
           ),
           isExpanded: _isExpandedList[2],
         ),
@@ -79,9 +94,16 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
             return const ListTile(title: Text("example sentences"));
           },
           body: Column(
-            children: sentencesControllers
-                .map((controller) => TextField(controller: controller))
-                .toList(),
+            children: [
+              for (int i = 0; i < sentencesControllers.length; i++)
+                TextField(
+                  controller: sentencesControllers[i],
+                  onChanged: (value) {
+                    widget._resp.exampleSentences[i] = value;
+                    widget.onValueChanged(widget._resp);
+                  },
+                ),
+            ],
           ),
           isExpanded: _isExpandedList[3],
         )

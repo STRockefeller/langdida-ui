@@ -18,13 +18,33 @@ class Connections {
     return response.statusCode == 200;
   }
 
-  static Future<GetCardResponse> getCard(String word, language) async {
+  static Future<CardModel> getCard(String word, language) async {
     Response response = await Dio()
         .get("${_getServerAddress()}/card/get?word=$word&language=$language");
     if (response.statusCode != 200) {
       throw ApiException(
           response.statusCode ?? 0, response.statusMessage ?? "");
     }
-    return GetCardResponse.fromJson(response.data);
+    return CardModel.fromJson(response.data);
+  }
+
+  // throw exception while response status code is not 200
+  static Future<void> createCard(CardModel card) async {
+    Response response = await Dio()
+        .post('${_getServerAddress()}/card/create', data: card.toJson());
+    if (response.statusCode != 200) {
+      throw ApiException(
+          response.statusCode ?? 0, response.statusMessage ?? "");
+    }
+  }
+
+  // throw exception while response status code is not 200
+  static Future<void> editCard(CardModel card) async {
+    Response response = await Dio()
+        .post('${_getServerAddress()}/card/edit', data: card.toJson());
+    if (response.statusCode != 200) {
+      throw ApiException(
+          response.statusCode ?? 0, response.statusMessage ?? "");
+    }
   }
 }

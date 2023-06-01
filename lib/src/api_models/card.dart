@@ -1,4 +1,4 @@
-class GetCardResponse {
+class CardModel {
   CardIndex index;
   List<String> labels;
   List<String> explanations;
@@ -6,7 +6,7 @@ class GetCardResponse {
   int familiarity;
   String reviewDate;
 
-  GetCardResponse({
+  CardModel({
     required this.index,
     required this.labels,
     required this.explanations,
@@ -15,15 +15,26 @@ class GetCardResponse {
     required this.reviewDate,
   });
 
-  factory GetCardResponse.fromJson(Map<String, dynamic> json) {
-    return GetCardResponse(
+  factory CardModel.fromJson(Map<String, dynamic> json) {
+    return CardModel(
       index: CardIndex.fromJson(json['index']),
       labels: List<String>.from(json['labels']),
       explanations: List<String>.from(json['explanations']),
       exampleSentences: List<String>.from(json['example_sentences']),
-      familiarity: json['familiarity'],
+      familiarity: json.containsKey('familiarity') ? json['familiarity'] : 0,
       reviewDate: json['review_date'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'index': index.toJson(),
+      'labels': labels,
+      'explanations': explanations,
+      'example_sentences': exampleSentences,
+      'familiarity': familiarity,
+      'review_date': reviewDate,
+    };
   }
 }
 
@@ -36,7 +47,14 @@ class CardIndex {
   factory CardIndex.fromJson(Map<String, dynamic> json) {
     return CardIndex(
       name: json['name'],
-      language: json['language'],
+      language: json.containsKey('language') ? json['language'] : 'en',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'language': language,
+    };
   }
 }
