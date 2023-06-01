@@ -31,6 +31,27 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
         widget._resp.labels.map((e) => TextEditingController(text: e)).toList();
   }
 
+  void addExplanation() {
+    const initialContent = "new explanation";
+    widget._resp.explanations.add(initialContent);
+    explanationsControllers.add(TextEditingController(text: initialContent));
+    setState(() {});
+  }
+
+  void addSentence() {
+    const initialContent = "new sentence";
+    widget._resp.exampleSentences.add(initialContent);
+    sentencesControllers.add(TextEditingController(text: initialContent));
+    setState(() {});
+  }
+
+  void addLabel() {
+    const initialContent = "new label";
+    widget._resp.labels.add(initialContent);
+    labelsControllers.add(TextEditingController(text: initialContent));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExpansionPanelList(
@@ -67,6 +88,10 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
                     widget.onValueChanged(widget._resp);
                   },
                 ),
+              FloatingActionButton(
+                onPressed: addLabel,
+                child: const Icon(Icons.add),
+              ),
             ],
           ),
           isExpanded: _isExpandedList[1],
@@ -85,6 +110,10 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
                     widget.onValueChanged(widget._resp);
                   },
                 ),
+              FloatingActionButton(
+                onPressed: addExplanation,
+                child: const Icon(Icons.add),
+              ),
             ],
           ),
           isExpanded: _isExpandedList[2],
@@ -103,6 +132,10 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
                     widget.onValueChanged(widget._resp);
                   },
                 ),
+              FloatingActionButton(
+                onPressed: addSentence,
+                child: const Icon(Icons.add),
+              ),
             ],
           ),
           isExpanded: _isExpandedList[3],
