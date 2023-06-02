@@ -100,8 +100,8 @@ class _WordDialogState extends State<WordDialog> {
           ],
         ),
         Positioned(
-          left: 0,
-          bottom: 0,
+          left: 15,
+          bottom: 15,
           child: Tooltip(
             message: "get the meanings of the vocabulary from dictionaries",
             child: FloatingActionButton(
