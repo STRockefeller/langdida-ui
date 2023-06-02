@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 
 class CardExpansionPanelList extends StatefulWidget {
-  final CardModel _resp;
+  final CardModel _card;
   final Function(CardModel newResponse) onValueChanged;
-  const CardExpansionPanelList(this._resp, this.onValueChanged, {super.key});
+  List<String>? _searchedExplanations;
+  CardExpansionPanelList(this._card, this.onValueChanged,
+      {super.key, List<String>? searchedExplanations})
+      : _searchedExplanations = searchedExplanations;
 
   @override
   State<CardExpansionPanelList> createState() => _CardExpansionPanelListState();
@@ -19,53 +22,64 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
   final List<bool> _isExpandedList = List.filled(4, false);
 
   @override
+  void setState(VoidCallback fn) {
+    widget._card.explanations.addAll(widget._searchedExplanations ?? []);
+    explanationsControllers.addAll(widget._searchedExplanations
+            ?.map((e) => TextEditingController(text: e)) ??
+        []);
+    widget._searchedExplanations = null;
+    super.setState(fn);
+  }
+
+  @override
   void initState() {
     super.initState();
-    explanationsControllers = widget._resp.explanations
+
+    explanationsControllers = widget._card.explanations
         .map((e) => TextEditingController(text: e))
         .toList();
-    sentencesControllers = widget._resp.exampleSentences
+    sentencesControllers = widget._card.exampleSentences
         .map((e) => TextEditingController(text: e))
         .toList();
     labelsControllers =
-        widget._resp.labels.map((e) => TextEditingController(text: e)).toList();
+        widget._card.labels.map((e) => TextEditingController(text: e)).toList();
   }
 
   void addExplanation() {
     const initialContent = "new explanation";
-    widget._resp.explanations.add(initialContent);
+    widget._card.explanations.add(initialContent);
     explanationsControllers.add(TextEditingController(text: initialContent));
     setState(() {});
   }
 
   void removeExplanation(int index) {
-    widget._resp.explanations.removeAt(index);
+    widget._card.explanations.removeAt(index);
     explanationsControllers.removeAt(index);
     setState(() {});
   }
 
   void addSentence() {
     const initialContent = "new sentence";
-    widget._resp.exampleSentences.add(initialContent);
+    widget._card.exampleSentences.add(initialContent);
     sentencesControllers.add(TextEditingController(text: initialContent));
     setState(() {});
   }
 
   void removeSentence(int index) {
-    widget._resp.exampleSentences.removeAt(index);
+    widget._card.exampleSentences.removeAt(index);
     sentencesControllers.removeAt(index);
     setState(() {});
   }
 
   void addLabel() {
     const initialContent = "new label";
-    widget._resp.labels.add(initialContent);
+    widget._card.labels.add(initialContent);
     labelsControllers.add(TextEditingController(text: initialContent));
     setState(() {});
   }
 
   void removeLabel(int index) {
-    widget._resp.labels.removeAt(index);
+    widget._card.labels.removeAt(index);
     labelsControllers.removeAt(index);
     setState(() {});
   }
@@ -97,8 +111,8 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
               const ListTile(title: Text("Index")),
           body: Column(
             children: [
-              Text("word: ${widget._resp.index.name}"),
-              Text("language: ${widget._resp.index.language}"),
+              Text("word: ${widget._card.index.name}"),
+              Text("language: ${widget._card.index.language}"),
             ],
           ),
           isExpanded: _isExpandedList[0],
@@ -116,8 +130,8 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
                       child: TextField(
                         controller: labelsControllers[i],
                         onChanged: (value) {
-                          widget._resp.labels[i] = value;
-                          widget.onValueChanged(widget._resp);
+                          widget._card.labels[i] = value;
+                          widget.onValueChanged(widget._card);
                         },
                       ),
                     ),
@@ -145,8 +159,8 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
                       child: TextField(
                         controller: explanationsControllers[i],
                         onChanged: (value) {
-                          widget._resp.explanations[i] = value;
-                          widget.onValueChanged(widget._resp);
+                          widget._card.explanations[i] = value;
+                          widget.onValueChanged(widget._card);
                         },
                       ),
                     ),
@@ -174,8 +188,8 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
                       child: TextField(
                         controller: sentencesControllers[i],
                         onChanged: (value) {
-                          widget._resp.exampleSentences[i] = value;
-                          widget.onValueChanged(widget._resp);
+                          widget._card.exampleSentences[i] = value;
+                          widget.onValueChanged(widget._card);
                         },
                       ),
                     ),

@@ -66,9 +66,9 @@ class _WordDialogState extends State<WordDialog> {
     String lang = storage.read("language") ?? "en";
     _card = CardModel(
       index: CardIndex(name: widget._target, language: lang),
-      labels: ["new label"],
-      explanations: ["new explanation"],
-      exampleSentences: ["new sentence"],
+      labels: [],
+      explanations: [],
+      exampleSentences: [],
       familiarity: 0,
       reviewDate: "",
     );
@@ -77,23 +77,52 @@ class _WordDialogState extends State<WordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget._target),
-      insetPadding: EdgeInsets.zero,
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            _content,
+    return Stack(
+      children: [
+        AlertDialog(
+          title: Text(widget._target),
+          insetPadding: EdgeInsets.zero,
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                _content,
+              ],
+            ),
+          ),
+          actions: [
+            _upsertButton,
+            TextButton(
+              child: const Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         ),
-      ),
-      actions: [
-        _upsertButton,
-        TextButton(
-          child: const Text("Close"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        Positioned(
+          left: 0,
+          bottom: 0,
+          child: Tooltip(
+            message: "get the meanings of the vocabulary from dictionaries",
+            child: FloatingActionButton(
+              child: const Icon(Icons.search),
+              onPressed: () {
+                Connections.searchMeanings(
+                        GetStorage().read("language") ?? "en", widget._target)
+                    .then((value) {
+                  setState(() {
+                    _content = CardExpansionPanelList(
+                      _card,
+                      (CardModel newResp) {
+                        _card = newResp;
+                      },
+                      searchedExplanations: value,
+                    );
+                  });
+                });
+              },
+            ),
+          ),
         ),
       ],
     );

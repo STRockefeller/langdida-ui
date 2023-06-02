@@ -47,4 +47,25 @@ class Connections {
           response.statusCode ?? 0, response.statusMessage ?? "");
     }
   }
+
+  static Future<List<String>> searchMeanings(String language, String word) async {
+    try {// Replace with your API base URL
+      final response = await Dio().get(
+        '${_getServerAddress()}/card/dictionary/meanings',
+        queryParameters: {
+          'language': language,
+          'word': word,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final meanings = List<String>.from(response.data);
+        return meanings;
+      } else {
+        throw Exception('Failed to search meanings');
+      }
+    } catch (error) {
+      throw Exception('Failed to connect to the API');
+    }
+  }
 }
