@@ -41,6 +41,7 @@ dependencies:
   http: ^1.0.0
   file_picker: ^5.3.1
   intl: ^0.18.1
+  syncfusion_flutter_datagrid: ^21.2.8
 
 dev_dependencies:
   flutter_test:

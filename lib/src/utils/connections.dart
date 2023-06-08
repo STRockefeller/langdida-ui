@@ -41,15 +41,16 @@ class Connections {
   // throw exception while response status code is not 200
   static Future<void> editCard(CardModel card) async {
     Response response = await Dio()
-        .post('${_getServerAddress()}/card/edit', data: card.toJson());
+        .put('${_getServerAddress()}/card/edit', data: card.toJson());
     if (response.statusCode != 200) {
       throw ApiException(
           response.statusCode ?? 0, response.statusMessage ?? "");
     }
   }
 
-  static Future<List<String>> searchMeanings(String language, String word) async {
-    try {// Replace with your API base URL
+  static Future<List<String>> searchMeanings(
+      String language, String word) async {
+    try {
       final response = await Dio().get(
         '${_getServerAddress()}/card/dictionary/meanings',
         queryParameters: {
@@ -67,5 +68,42 @@ class Connections {
     } catch (error) {
       throw Exception('Failed to connect to the API');
     }
+  }
+
+  static Future<List<CardModel>> listCards(
+      [String? language, bool needReview = false, String? label]) async {
+    try {
+      Map<String, dynamic> queryParameters = <String, dynamic>{};
+      if (language != null) {
+        queryParameters['language'] = language;
+      }
+      if (needReview) {
+        queryParameters['needReview'] = "true";
+      }
+      if (label != null) {
+        queryParameters['label'] = label;
+      }
+      final response = await Dio().get(
+        '${_getServerAddress()}/card/list',
+        queryParameters: queryParameters,
+      );
+      if (response.statusCode == 200) {
+        final List<CardModel> cards =
+            CardModel.arrayFromJson(_parseListCardsResponse(response.data));
+        return cards;
+      } else {
+        throw Exception('Failed to search meanings');
+      }
+    } catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  static List<Map<String, dynamic>> _parseListCardsResponse(dynamic data) {
+    List<Map<String, dynamic>> res = [];
+    (data as List<dynamic>).forEach((element) {
+      res.add(element as Map<String, dynamic>);
+    });
+    return res;
   }
 }

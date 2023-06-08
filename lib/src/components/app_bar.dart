@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/features/book/book.dart';
+import 'package:langdida_ui/src/features/review/review.dart';
 import 'package:langdida_ui/src/features/upload/upload.dart';
-
-import '../features/settings/settings.dart';
+import 'package:langdida_ui/src/features/settings/settings.dart';
 
 AppBar newLangDiDaAppBar(String title, BuildContext context) {
   return AppBar(
@@ -27,8 +27,15 @@ AppBar newLangDiDaAppBar(String title, BuildContext context) {
           ),
           Expanded(
             child: IconButton(
-              icon: const Icon(Icons.bookmark),
-              onPressed: () {},
+              icon: const Icon(Icons.abc),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReviewPage(
+                              key: UniqueKey(),
+                            )));
+              },
             ),
           ),
           Expanded(
@@ -46,7 +53,7 @@ AppBar newLangDiDaAppBar(String title, BuildContext context) {
           ),
           Expanded(
             child: IconButton(
-              icon: const Icon(Icons.history),
+              icon: const Icon(Icons.bar_chart_rounded),
               onPressed: () {},
             ),
           ),

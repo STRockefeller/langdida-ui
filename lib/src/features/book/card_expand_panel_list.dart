@@ -100,7 +100,6 @@ class _CardExpansionPanelListState extends State<CardExpansionPanelList> {
     return ExpansionPanelList(
       key: UniqueKey(),
       expansionCallback: (int panelIndex, bool isExpanded) {
-        debugPrint("index: $panelIndex,isExpanded: $isExpanded");
         setState(() {
           _isExpandedList[panelIndex] = !isExpanded;
         });

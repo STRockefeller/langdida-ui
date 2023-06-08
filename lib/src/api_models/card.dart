@@ -26,6 +26,15 @@ class CardModel {
     );
   }
 
+  static List<CardModel> arrayFromJson(List<Map<String, dynamic>> json) {
+
+  List<CardModel> cardModels = json.map((cardJson) {
+    return CardModel.fromJson(cardJson);
+  }).toList();
+
+  return cardModels;
+}
+
   Map<String, dynamic> toJson() {
     return {
       'index': index.toJson(),
