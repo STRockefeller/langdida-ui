@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:langdida_ui/src/components/app_bar.dart';
-import 'package:langdida_ui/src/features/book/word_dialog.dart';
+import 'package:langdida_ui/src/components/word_dialog.dart';
 
 class BookPage extends StatelessWidget {
   BookPage({Key? key}) : super(key: key);
