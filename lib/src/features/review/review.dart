@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/components/app_bar.dart';
 import 'package:langdida_ui/src/components/flash_message.dart';
-import 'package:langdida_ui/src/features/review/sync_fusion_data_source.dart';
+import 'package:langdida_ui/src/features/review/pluto_table_resources.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
@@ -14,81 +13,39 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  List<CardModel> cards = [];
+  List<PlutoRow> rows = [];
+  // ? I don't know why the onloaded event is not triggered when setState()
+  Widget grid = const Text("Loading");
 
   @override
   void initState() {
-    Connections.listCards().then((value) {
-      cards = value;
-      setState(() {});
+    Connections.listCards().then((cards) {
+      setState(() {
+        rows = PlutoGridTable.newRows(cards);
+        grid = _newPlutoGrid();
+      });
     }).catchError((err) {
       showFlashMessage(context, err.toString());
     });
     super.initState();
   }
 
-  GridColumn _newGridColumn(String id) {
-    return GridColumn(
-      columnName: id,
-      label: Container(
-        padding: const EdgeInsets.all(16.0),
-        alignment: Alignment.centerRight,
-        child: Text(id),
+  Widget _newPlutoGrid() {
+    return PlutoGrid(
+      columns: PlutoGridTable.columns,
+      rows: rows,
+      configuration: const PlutoGridConfiguration(
+        columnSize:
+            PlutoGridColumnSizeConfig(autoSizeMode: PlutoAutoSizeMode.equal),
       ),
     );
-  }
-
-  FutureBuilder<String> _loadMoreBuilder(BuildContext ctx, LoadMoreRows rows) {
-    Future<String> loadRows() async {
-      await rows();
-      return Future<String>.value('Completed');
-    }
-
-    return FutureBuilder<String>(
-        initialData: 'loading',
-        future: loadRows(),
-        builder: (context, snapShot) {
-          if (snapShot.data == 'loading') {
-            return Container(
-                height: 60.0,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    border: BorderDirectional(
-                        top: BorderSide(
-                            width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)))),
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Colors.deepPurple)));
-          } else {
-            return SizedBox.fromSize(size: Size.zero);
-          }
-        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: newLangDiDaAppBar("Cards", context),
-      body: Center(
-        child: Expanded(
-          child: SfDataGrid(
-            source: CardDataSource(cards),
-            columnWidthMode: ColumnWidthMode.fitByColumnName,
-            allowEditing: true,
-            frozenColumnsCount: 1,
-            loadMoreViewBuilder: _loadMoreBuilder,
-            columns: [
-              _newGridColumn("Name"),
-              _newGridColumn("Language"),
-              _newGridColumn("Familiarity"),
-              _newGridColumn("Review Date"),
-            ],
-            allowSorting: true,
-            selectionMode: SelectionMode.single,
-          ),
-        ),
-      ),
+      body: Center(child: grid),
     );
   }
 }
