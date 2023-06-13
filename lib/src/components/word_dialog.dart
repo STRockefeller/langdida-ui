@@ -7,8 +7,9 @@ import 'package:langdida_ui/src/utils/connections.dart';
 import 'package:intl/intl.dart';
 
 class WordDialog extends StatefulWidget {
-  final String _target;
-  const WordDialog(this._target, {super.key});
+  final String _word;
+  final String _lang;
+  const WordDialog(this._word, this._lang, {super.key});
 
   @override
   State<WordDialog> createState() => _WordDialogState();
@@ -21,10 +22,8 @@ class _WordDialogState extends State<WordDialog> {
       TextButton(onPressed: () {}, child: const Text("Loading"));
 
   void _getCard() async {
-    GetStorage storage = GetStorage();
-    String lang = storage.read("language") ?? "en";
     try {
-      _card = await Connections.getCard(widget._target, lang);
+      _card = await Connections.getCard(widget._word, widget._lang);
       _upsertButton = TextButton(
         child: const Text("Edit Card"),
         onPressed: () {
@@ -62,10 +61,8 @@ class _WordDialogState extends State<WordDialog> {
   @override
   void initState() {
     super.initState();
-    GetStorage storage = GetStorage();
-    String lang = storage.read("language") ?? "en";
     _card = CardModel(
-      index: CardIndex(name: widget._target, language: lang),
+      index: CardIndex(name: widget._word, language: widget._lang),
       labels: [],
       explanations: [],
       exampleSentences: [],
@@ -80,7 +77,7 @@ class _WordDialogState extends State<WordDialog> {
     return Stack(
       children: [
         AlertDialog(
-          title: Text(widget._target),
+          title: Text(widget._word),
           insetPadding: EdgeInsets.zero,
           content: SingleChildScrollView(
             child: Column(
@@ -107,8 +104,7 @@ class _WordDialogState extends State<WordDialog> {
             child: FloatingActionButton(
               child: const Icon(Icons.search),
               onPressed: () {
-                Connections.searchMeanings(
-                        GetStorage().read("language") ?? "en", widget._target)
+                Connections.searchMeanings(widget._lang, widget._word)
                     .then((value) {
                   setState(() {
                     _content = CardExpansionPanelList(
