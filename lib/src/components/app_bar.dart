@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/features/book/book.dart';
+import 'package:langdida_ui/src/features/graph_view/graph_view.dart';
 import 'package:langdida_ui/src/features/review/review.dart';
 import 'package:langdida_ui/src/features/upload/upload.dart';
 import 'package:langdida_ui/src/features/settings/settings.dart';
@@ -48,6 +49,15 @@ AppBar newLangDiDaAppBar(String title, BuildContext context) {
                         builder: (context) => UploadPage(
                               key: UniqueKey(),
                             )));
+              },
+            ),
+          ),
+          Expanded(
+            child: IconButton(
+              icon: const Icon(Icons.auto_awesome),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => GraphViewPage()));
               },
             ),
           ),
