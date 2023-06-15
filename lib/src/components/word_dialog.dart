@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/components/flash_message.dart';
 import 'package:langdida_ui/src/features/book/card_expand_panel_list.dart';
