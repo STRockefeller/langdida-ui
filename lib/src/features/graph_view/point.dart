@@ -4,8 +4,8 @@ class CardPoint {
   double x;
   double y;
   final double radius;
-  final double vx;
-  final double vy;
+  double vx;
+  double vy;
   final CardIndex cardIndex;
 
   CardPoint({
@@ -18,14 +18,27 @@ class CardPoint {
   });
 
   void animate() {
-    if (y < radius || y > (1 - radius)) {
-      _reverseVelocity(vy);
-    } else if (x < radius || x > (1 - radius)) {
-      _reverseVelocity(vx);
+    if (_reachPositiveBound(x)) {
+      vx = -vx.abs();
     }
+    if (_reachNegativeBound(x)) {
+      vx = vx.abs();
+    }
+    if (_reachPositiveBound(y)) {
+      vy = -vy.abs();
+    }
+    if (_reachNegativeBound(y)) {
+      vy = vy.abs();
+    }
+    x += vx;
+    y += vy;
   }
 
-  void _reverseVelocity(double velocity) {
-    velocity = -1 * velocity;
+  bool _reachPositiveBound(double position) {
+    return position >= 1;
+  }
+
+  bool _reachNegativeBound(double position) {
+    return position <= 0;
   }
 }

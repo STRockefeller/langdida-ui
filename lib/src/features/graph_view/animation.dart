@@ -72,7 +72,7 @@ class _AnimatedCanvasState extends State<AnimatedCanvas>
   }
 
   double _getRandomVelocity() {
-    return _velocity - (Random().nextDouble() * 0.5);
+    return (_velocity - (Random().nextDouble() * 0.5)) * 0.003;
   }
 
   @override
