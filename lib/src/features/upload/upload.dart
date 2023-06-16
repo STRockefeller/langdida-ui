@@ -37,7 +37,7 @@ class _UploadPageState extends State<UploadPage> {
             })
         .catchError((e) {
       showFlashMessage(context, e.toString());
-      return e.toString();
+      return <void>{};
     });
   }
 
