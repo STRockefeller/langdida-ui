@@ -106,4 +106,22 @@ class Connections {
     });
     return res;
   }
+
+  static Future<List<CardIndex>> listCardIndexes() async {
+    try {
+      final response =
+          await Dio().get('${_getServerAddress()}/card/index/list');
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(response.data).map((e) {
+          return CardIndex(
+              name: e["name"] ?? "", language: e["language"] ?? "");
+        }).toList();
+      } else {
+        throw Exception('Failed to query the card indexes');
+      }
+    } catch (error) {
+      throw Exception('Failed to connect to the API');
+    }
+  }
 }

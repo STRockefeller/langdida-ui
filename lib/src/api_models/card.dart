@@ -21,19 +21,18 @@ class CardModel {
       labels: List<String>.from(json['labels']),
       explanations: List<String>.from(json['explanations']),
       exampleSentences: List<String>.from(json['example_sentences']),
-      familiarity: json.containsKey('familiarity') ? json['familiarity'] : 0,
+      familiarity: json['familiarity'] ?? 0,
       reviewDate: json['review_date'],
     );
   }
 
   static List<CardModel> arrayFromJson(List<Map<String, dynamic>> json) {
+    List<CardModel> cardModels = json.map((cardJson) {
+      return CardModel.fromJson(cardJson);
+    }).toList();
 
-  List<CardModel> cardModels = json.map((cardJson) {
-    return CardModel.fromJson(cardJson);
-  }).toList();
-
-  return cardModels;
-}
+    return cardModels;
+  }
 
   Map<String, dynamic> toJson() {
     return {

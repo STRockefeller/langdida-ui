@@ -1,37 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-class Point {
-  double x;
-  double y;
-  final double radius;
-  final double vx;
-  final double vy;
-
-  Point({
-    required this.x,
-    required this.y,
-    required this.radius,
-    required this.vx,
-    required this.vy,
-  });
-
-  void animate() {
-    if (y < radius || y > (1 - radius)) {
-      _reverseVelocity(vy);
-    } else if (x < radius || x > (1 - radius)) {
-      _reverseVelocity(vx);
-    }
-  }
-
-  void _reverseVelocity(double velocity) {
-    velocity = -1 * velocity;
-  }
-}
+import 'package:langdida_ui/src/api_models/card.dart';
+import 'package:langdida_ui/src/features/graph_view/point.dart';
 
 class AnimatedCanvas extends StatefulWidget {
-  const AnimatedCanvas({Key? key}) : super(key: key);
+  List<CardIndex> cards;
+  AnimatedCanvas({Key? key, required this.cards}) : super(key: key);
 
   @override
   _AnimatedCanvasState createState() => _AnimatedCanvasState();
@@ -40,10 +15,9 @@ class AnimatedCanvas extends StatefulWidget {
 class _AnimatedCanvasState extends State<AnimatedCanvas>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late List<Point> _points;
-  Point? _focusedPoint;
+  late List<CardPoint> _points;
+  CardPoint? _focusedPoint;
 
-  final int _pointsNumber = 3;
   final double _velocity = 0.3;
   final double _basePointSize = 0.5;
   final Color _circleColor = Colors.white;
@@ -79,19 +53,20 @@ class _AnimatedCanvasState extends State<AnimatedCanvas>
   void _initScene() {
     _points = [];
     final random = Random();
-    for (var i = 0; i < _pointsNumber; i++) {
-      _points.add(Point(
+    for (var i = 0; i < widget.cards.length; i++) {
+      _points.add(CardPoint(
         x: random.nextDouble(),
         y: random.nextDouble(),
         radius: (_basePointSize + random.nextInt(3) + 5).toDouble(),
         vx: _getRandomVelocity(),
         vy: _getRandomVelocity(),
+        cardIndex: widget.cards[i],
       ));
     }
   }
 
   void _updateScene() {
-    for (var i = 0; i < _pointsNumber; i++) {
+    for (var i = 0; i < widget.cards.length; i++) {
       _points[i].animate();
     }
   }
@@ -120,7 +95,7 @@ class _AnimatedCanvasState extends State<AnimatedCanvas>
   }
 
   void _setFocusedPoint(double x, double y) {
-    Point? newFocusedPoint;
+    CardPoint? newFocusedPoint;
     bool shouldShowDialog = false;
 
     for (final point in _points) {
@@ -143,17 +118,17 @@ class _AnimatedCanvasState extends State<AnimatedCanvas>
       }
     }
 
-    void _addPoint(double x, double y) {
-      setState(() {
-        _points.add(Point(
-          x: x,
-          y: y,
-          radius: _basePointSize + Random().nextInt(3) + 5,
-          vx: _getRandomVelocity(),
-          vy: _getRandomVelocity(),
-        ));
-      });
-    }
+    // void _addPoint(double x, double y) {
+    //   setState(() {
+    //     _points.add(CardPoint(
+    //       x: x,
+    //       y: y,
+    //       radius: _basePointSize + Random().nextInt(3) + 5,
+    //       vx: _getRandomVelocity(),
+    //       vy: _getRandomVelocity(),
+    //     ));
+    //   });
+    // }
 
     setState(() {
       if (shouldShowDialog) {
@@ -182,9 +157,9 @@ class _AnimatedCanvasState extends State<AnimatedCanvas>
 }
 
 class _CanvasPainter extends CustomPainter {
-  final List<Point> points;
+  final List<CardPoint> points;
   final Color circleColor;
-  final Point? focusedPoint;
+  final CardPoint? focusedPoint;
 
   _CanvasPainter(this.points, this.circleColor, this.focusedPoint);
 
@@ -214,14 +189,14 @@ class _CanvasPainter extends CustomPainter {
     }
   }
 
-  void _drawPoint(Canvas canvas, Point point, Size size, bool isFocused) {
+  void _drawPoint(Canvas canvas, CardPoint point, Size size, bool isFocused) {
     final center = Offset(point.x * size.width, point.y * size.height);
     final paint = Paint()..color = isFocused ? Colors.red : circleColor;
 
     canvas.drawCircle(center, point.radius, paint);
   }
 
-  void _drawLine(Canvas canvas, Point point1, Point point2, Size size) {
+  void _drawLine(Canvas canvas, CardPoint point1, CardPoint point2, Size size) {
     final t1 = 80 * (point1.radius / 2);
     final t2 = 80 * (point2.radius / 2);
 
