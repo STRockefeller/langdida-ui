@@ -124,4 +124,31 @@ class Connections {
       throw Exception('Failed to connect to the API');
     }
   }
+
+  static Future<CardAssociations> getAssociations() async {
+    try {
+      final response =
+          await Dio().get('${_getServerAddress()}/card/association');
+
+      if (response.statusCode == 200) {
+        return CardAssociations.fromJson(response.data);
+      } else {
+        throw Exception('Failed to get related cards');
+      }
+    } catch (error) {
+      throw Exception('Failed to get related cards');
+    }
+  }
+
+  // throw exception while response status code is not 200
+  static Future<void> createCardAssociations(
+      CreateAssociationConditions conditions) async {
+    Response response = await Dio().post(
+        '${_getServerAddress()}/card/association/create',
+        data: conditions.toJson());
+    if (response.statusCode != 200) {
+      throw ApiException(
+          response.statusCode ?? 0, response.statusMessage ?? "");
+    }
+  }
 }

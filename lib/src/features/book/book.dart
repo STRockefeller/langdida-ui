@@ -33,7 +33,8 @@ class BookPage extends StatelessWidget {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return WordDialog(_controller.text,GetStorage().read("language")??"en");
+              return WordDialog(
+                  _controller.text, GetStorage().read("language") ?? "en");
             },
           );
         },

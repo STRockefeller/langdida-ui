@@ -5,18 +5,20 @@ import 'package:langdida_ui/src/components/card_expand_panel_list.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
 import 'package:intl/intl.dart';
 
-class WordDialog extends StatefulWidget {
+class WordAssociationDialog extends StatefulWidget {
   final String _word;
   final String _lang;
   // todo: it is a bad design, fix it
   final Function? callback;
-  const WordDialog(this._word, this._lang, {super.key, this.callback});
+
+  const WordAssociationDialog(this._word, this._lang,
+      {super.key, this.callback});
 
   @override
-  State<WordDialog> createState() => _WordDialogState();
+  State<WordAssociationDialog> createState() => _WordAssociationDialogState();
 }
 
-class _WordDialogState extends State<WordDialog> {
+class _WordAssociationDialogState extends State<WordAssociationDialog> {
   Widget _content = const ExpansionPanelList();
   late CardModel _card;
   TextButton _upsertButton =
@@ -98,36 +100,12 @@ class _WordDialogState extends State<WordDialog> {
           ],
         ),
         Positioned(
-          left: 15,
-          bottom: 15,
-          child: Tooltip(
-            message: "get the meanings of the vocabulary from dictionaries",
-            child: FloatingActionButton(
-              child: const Icon(Icons.search),
-              onPressed: () {
-                Connections.searchMeanings(widget._lang, widget._word)
-                    .then((value) {
-                  setState(() {
-                    _content = CardExpansionPanelList(
-                      _card,
-                      (CardModel newResp) {
-                        _card = newResp;
-                      },
-                      searchedExplanations: value,
-                    );
-                  });
-                });
-              },
-            ),
-          ),
-        ),
-        Positioned(
           right: 15,
           bottom: 15,
           child: Tooltip(
-            message: "view associations",
+            message: "view basic info",
             child: FloatingActionButton(
-              child: const Icon(Icons.timeline),
+              child: const Icon(Icons.abc_outlined),
               onPressed: () {
                 if (widget.callback != null) {
                   widget.callback!();
