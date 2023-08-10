@@ -101,9 +101,9 @@ class Connections {
 
   static List<Map<String, dynamic>> _parseListCardsResponse(dynamic data) {
     List<Map<String, dynamic>> res = [];
-    (data as List<dynamic>).forEach((element) {
+    for (var element in (data as List<dynamic>)) {
       res.add(element as Map<String, dynamic>);
-    });
+    }
     return res;
   }
 

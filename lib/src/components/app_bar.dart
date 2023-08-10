@@ -57,7 +57,7 @@ AppBar newLangDiDaAppBar(String title, BuildContext context) {
               icon: const Icon(Icons.auto_awesome),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => GraphViewPage()));
+                    MaterialPageRoute(builder: (context) => const GraphViewPage()));
               },
             ),
           ),

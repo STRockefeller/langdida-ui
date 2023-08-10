@@ -6,6 +6,8 @@ import 'package:langdida_ui/src/features/graph_view/animation.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
 
 class GraphViewPage extends StatefulWidget {
+  const GraphViewPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _GraphViewPageState();
 }
