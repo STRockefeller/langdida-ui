@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
-import 'package:langdida_ui/src/components/flash_message.dart';
-import 'package:langdida_ui/src/components/card_expand_panel_list.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
-import 'package:intl/intl.dart';
 
 class WordAssociationDialog extends StatefulWidget {
   final String _word;
   final String _lang;
-  // todo: it is a bad design, fix it
-  final Function? callback;
-
-  const WordAssociationDialog(this._word, this._lang,
-      {super.key, this.callback});
+  const WordAssociationDialog(this._word, this._lang, {super.key});
 
   @override
   State<WordAssociationDialog> createState() => _WordAssociationDialogState();
@@ -20,59 +13,105 @@ class WordAssociationDialog extends StatefulWidget {
 
 class _WordAssociationDialogState extends State<WordAssociationDialog> {
   Widget _content = const ExpansionPanelList();
-  late CardModel _card;
-  TextButton _upsertButton =
-      TextButton(onPressed: () {}, child: const Text("Loading"));
+  late CardAssociations _associations;
+  final List<bool> _isExpandedList = List.filled(7, false);
 
   void _getCard() async {
-    try {
-      _card = await Connections.getCard(widget._word, widget._lang);
-      _upsertButton = TextButton(
-        child: const Text("Edit Card"),
-        onPressed: () {
-          Connections.editCard(_card).then((value) {
-            showFlashMessage(context, "Complete");
-            Navigator.of(context).pop();
-          }).catchError((error) {
-            showFlashMessage(context, error.toString());
-          });
-        },
-      );
-    } catch (e) {
-      showFlashMessage(context, e.toString());
-      _upsertButton = TextButton(
-        child: const Text("Create Card"),
-        onPressed: () {
-          _card.familiarity = 0;
-          _card.reviewDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-          Connections.createCard(_card).then((value) {
-            showFlashMessage(context, "Complete");
-            Navigator.of(context).pop();
-          }).catchError((error) {
-            showFlashMessage(context, error.toString());
-          });
-        },
-      );
-    } finally {
-      setState(
-          () => _content = CardExpansionPanelList(_card, (CardModel newResp) {
-                _card = newResp;
-              }));
-    }
+    _associations =
+        await Connections.getAssociations(widget._word, widget._lang);
+    setState(() {
+      _content = _associationsRepresentation(_associations);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _card = CardModel(
-      index: CardIndex(name: widget._word, language: widget._lang),
-      labels: [],
-      explanations: [],
-      exampleSentences: [],
-      familiarity: 0,
-      reviewDate: "",
-    );
     _getCard();
+  }
+
+  Widget _associationsRepresentation(CardAssociations associations) {
+    return ExpansionPanelList(
+      key: UniqueKey(),
+      expansionCallback: (int panelIndex, bool isExpanded) {
+        setState(() {
+          _isExpandedList[panelIndex] = !isExpanded;
+        });
+      },
+      children: [
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("Index")),
+          body: _cardIndexRepresentation(associations.index),
+          isExpanded: _isExpandedList[0],
+        ),
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("Origin")),
+          body: _cardIndexRepresentation(associations.origin),
+          isExpanded: _isExpandedList[1],
+        ),
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("Derivatives")),
+          body: Column(
+            children: associations.derivatives
+                .map((derivative) => _cardIndexRepresentation(derivative))
+                .toList(),
+          ),
+          isExpanded: _isExpandedList[2],
+        ),
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("Synonyms")),
+          body: Column(
+            children: associations.synonyms
+                .map((synonym) => _cardIndexRepresentation(synonym))
+                .toList(),
+          ),
+          isExpanded: _isExpandedList[3],
+        ),
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("Antonyms")),
+          body: Column(
+            children: associations.antonyms
+                .map((antonym) => _cardIndexRepresentation(antonym))
+                .toList(),
+          ),
+          isExpanded: _isExpandedList[4],
+        ),
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("In Other Languages")),
+          body: Column(
+            children: associations.inOtherLanguages
+                .map((item) => _cardIndexRepresentation(item))
+                .toList(),
+          ),
+          isExpanded: _isExpandedList[5],
+        ),
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) =>
+              const ListTile(title: Text("Others")),
+          body: Column(
+            children: associations.others
+                .map((item) => _cardIndexRepresentation(item))
+                .toList(),
+          ),
+          isExpanded: _isExpandedList[6],
+        ),
+      ],
+    );
+  }
+
+  Widget _cardIndexRepresentation(CardIndex index) {
+    return Row(
+      children: [
+        Text(index.language, selectionColor: Colors.blueAccent),
+        Text(index.name, selectionColor: Colors.redAccent),
+      ],
+    );
   }
 
   @override
@@ -90,7 +129,6 @@ class _WordAssociationDialogState extends State<WordAssociationDialog> {
             ),
           ),
           actions: [
-            _upsertButton,
             TextButton(
               child: const Text("Close"),
               onPressed: () {
@@ -98,21 +136,6 @@ class _WordAssociationDialogState extends State<WordAssociationDialog> {
               },
             ),
           ],
-        ),
-        Positioned(
-          right: 15,
-          bottom: 15,
-          child: Tooltip(
-            message: "view basic info",
-            child: FloatingActionButton(
-              child: const Icon(Icons.abc_outlined),
-              onPressed: () {
-                if (widget.callback != null) {
-                  widget.callback!();
-                }
-              },
-            ),
-          ),
         ),
       ],
     );

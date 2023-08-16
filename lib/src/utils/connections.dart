@@ -125,10 +125,10 @@ class Connections {
     }
   }
 
-  static Future<CardAssociations> getAssociations() async {
+  static Future<CardAssociations> getAssociations(String word, language) async {
     try {
-      final response =
-          await Dio().get('${_getServerAddress()}/card/association');
+      final response = await Dio().get(
+          '${_getServerAddress()}/card/association?word=$word&language=$language');
 
       if (response.statusCode == 200) {
         return CardAssociations.fromJson(response.data);

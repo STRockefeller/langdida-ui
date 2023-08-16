@@ -8,9 +8,7 @@ import 'package:intl/intl.dart';
 class WordDialog extends StatefulWidget {
   final String _word;
   final String _lang;
-  // todo: it is a bad design, fix it
-  final Function? callback;
-  const WordDialog(this._word, this._lang, {super.key, this.callback});
+  const WordDialog(this._word, this._lang, {super.key});
 
   @override
   State<WordDialog> createState() => _WordDialogState();
@@ -117,21 +115,6 @@ class _WordDialogState extends State<WordDialog> {
                     );
                   });
                 });
-              },
-            ),
-          ),
-        ),
-        Positioned(
-          right: 15,
-          bottom: 15,
-          child: Tooltip(
-            message: "view associations",
-            child: FloatingActionButton(
-              child: const Icon(Icons.timeline),
-              onPressed: () {
-                if (widget.callback != null) {
-                  widget.callback!();
-                }
               },
             ),
           ),
