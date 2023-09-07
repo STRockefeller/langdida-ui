@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
+import 'package:langdida_ui/src/components/create_association_dialog.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
 
 class WordAssociationDialog extends StatefulWidget {
@@ -133,6 +134,17 @@ class _WordAssociationDialogState extends State<WordAssociationDialog> {
               child: const Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("New"),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext ctx) {
+                      return CreateAssociationDialog(CardIndex(
+                          name: widget._word, language: widget._lang));
+                    });
               },
             ),
           ],

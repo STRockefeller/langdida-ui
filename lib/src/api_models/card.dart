@@ -125,6 +125,46 @@ enum AssociationTypes {
   others,
 }
 
+extension AssociationTypesExtension on AssociationTypes {
+  String get stringValue {
+    switch (this) {
+      case AssociationTypes.origin:
+        return 'Origin';
+      case AssociationTypes.derivatives:
+        return 'Derivatives';
+      case AssociationTypes.synonyms:
+        return 'Synonyms';
+      case AssociationTypes.antonyms:
+        return 'Antonyms';
+      case AssociationTypes.inOtherLanguages:
+        return 'In Other Languages';
+      case AssociationTypes.others:
+        return 'Others';
+    }
+  }
+}
+
+extension StringExtension on String {
+  AssociationTypes? get associationType {
+    switch (this) {
+      case 'Origin':
+        return AssociationTypes.origin;
+      case 'Derivatives':
+        return AssociationTypes.derivatives;
+      case 'Synonyms':
+        return AssociationTypes.synonyms;
+      case 'Antonyms':
+        return AssociationTypes.antonyms;
+      case 'In Other Languages':
+        return AssociationTypes.inOtherLanguages;
+      case 'Others':
+        return AssociationTypes.others;
+      default:
+        return null;
+    }
+  }
+}
+
 class CreateAssociationConditions {
   CardIndex cardIndex;
   CardIndex relatedCardIndex;
