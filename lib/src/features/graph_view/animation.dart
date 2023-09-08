@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
+import 'package:langdida_ui/src/components/word_tab_dialog.dart';
 import 'package:langdida_ui/src/features/graph_view/point.dart';
 
 class AnimatedCanvas extends StatefulWidget {
@@ -136,16 +137,8 @@ class _AnimatedCanvasState extends State<AnimatedCanvas>
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Point Clicked'),
-              content: const Text('You clicked the focused point.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('OK'),
-                ),
-              ],
-            );
+            return WordTabDialog(_focusedPoint!.cardIndex.name,
+                _focusedPoint!.cardIndex.language);
           },
         );
       } else if (newFocusedPoint != null) {
