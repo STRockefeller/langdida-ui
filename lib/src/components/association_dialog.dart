@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/components/create_association_dialog.dart';
+import 'package:langdida_ui/src/components/word_tab_dialog.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -102,6 +103,17 @@ class _WordAssociationDialogState extends State<WordAssociationDialog> {
           width: 10,
         ),
         Text(index.name, style: const TextStyle(color: Colors.redAccent)),
+        const SizedBox(
+          width: 10,
+        ),
+        IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) =>
+                      WordTabDialog(index.name, index.language));
+            },
+            icon: const Icon(Icons.link))
       ],
     );
   }
