@@ -14,23 +14,7 @@ class WordAssociationDialog extends StatefulWidget {
 }
 
 class _WordAssociationDialogState extends State<WordAssociationDialog> {
-  Widget _content = const ExpansionPanelList();
-  final List<bool> _isExpandedList = List.filled(7, false);
-
-  @override
-  void initState() {
-    _content = FutureBuilder(
-        future: Connections.getAssociations(widget._word, widget._lang),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done ||
-              snapshot.data == null) {
-            return LoadingAnimationWidget.discreteCircle(
-                color: Colors.blue, size: 20);
-          }
-          return _associationsRepresentation(snapshot.data!);
-        }));
-    super.initState();
-  }
+  final List<bool> _isExpandedList = List.generate(7, (index) => false);
 
   Widget _associationsRepresentation(CardAssociations associations) {
     return ExpansionPanelList(
@@ -110,8 +94,14 @@ class _WordAssociationDialogState extends State<WordAssociationDialog> {
   Widget _cardIndexRepresentation(CardIndex index) {
     return Row(
       children: [
-        Text(index.language, selectionColor: Colors.blueAccent),
-        Text(index.name, selectionColor: Colors.redAccent),
+        Text(
+          index.language,
+          style: const TextStyle(color: Colors.blueAccent),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(index.name, style: const TextStyle(color: Colors.redAccent)),
       ],
     );
   }
@@ -124,11 +114,16 @@ class _WordAssociationDialogState extends State<WordAssociationDialog> {
           title: Text(widget._word),
           insetPadding: EdgeInsets.zero,
           content: SingleChildScrollView(
-            child: Column(
-              children: [
-                _content,
-              ],
-            ),
+            child: FutureBuilder(
+                future: Connections.getAssociations(widget._word, widget._lang),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done ||
+                      snapshot.data == null) {
+                    return LoadingAnimationWidget.discreteCircle(
+                        color: Colors.blue, size: 20);
+                  }
+                  return _associationsRepresentation(snapshot.data!);
+                })),
           ),
           actions: [
             TextButton(
