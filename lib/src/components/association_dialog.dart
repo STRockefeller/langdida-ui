@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/components/create_association_dialog.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class WordAssociationDialog extends StatefulWidget {
   final String _word;
@@ -14,21 +15,21 @@ class WordAssociationDialog extends StatefulWidget {
 
 class _WordAssociationDialogState extends State<WordAssociationDialog> {
   Widget _content = const ExpansionPanelList();
-  late CardAssociations _associations;
   final List<bool> _isExpandedList = List.filled(7, false);
-
-  void _getCard() async {
-    _associations =
-        await Connections.getAssociations(widget._word, widget._lang);
-    setState(() {
-      _content = _associationsRepresentation(_associations);
-    });
-  }
 
   @override
   void initState() {
+    _content = FutureBuilder(
+        future: Connections.getAssociations(widget._word, widget._lang),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done ||
+              snapshot.data == null) {
+            return LoadingAnimationWidget.discreteCircle(
+                color: Colors.blue, size: 20);
+          }
+          return _associationsRepresentation(snapshot.data!);
+        }));
     super.initState();
-    _getCard();
   }
 
   Widget _associationsRepresentation(CardAssociations associations) {

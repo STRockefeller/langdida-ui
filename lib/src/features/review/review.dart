@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/components/app_bar.dart';
 import 'package:langdida_ui/src/components/flash_message.dart';
-import 'package:langdida_ui/src/components/word_dialog.dart';
+import 'package:langdida_ui/src/components/word_tab_dialog.dart';
 import 'package:langdida_ui/src/features/review/pluto_table_resources.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -41,7 +41,7 @@ class _ReviewPageState extends State<ReviewPage> {
         showDialog(
             context: context,
             builder: (BuildContext ctx) {
-              return WordDialog(event.row?.cells["name"]?.value,
+              return WordTabDialog(event.row?.cells["name"]?.value,
                   event.row?.cells["language"]?.value);
             });
       },
