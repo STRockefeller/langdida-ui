@@ -47,3 +47,11 @@ work in progress
 ## Meta
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
+
+## Screenshots
+
+![table](https://i.imgur.com/MZvbrBb.png)
+
+![graph](https://i.imgur.com/pOcdFtU.png)
+
+![dialog](https://i.imgur.com/v6BvUkF.png)
