@@ -1,58 +1,27 @@
-name: Deploy and release on tag
+name: Flutter CI
+
 on:
   push:
     branches:
-      - main
-    tags:
-      - '*'
+      - master
+      - release-action
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-flutter@v1
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'beta'
       - run: flutter pub get
-      - run: flutter build windows
-      - run: flutter build web
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-ssh@v2
-      - run: |
-          ssh -T git@example.com
-          mkdir -p ~/deploy/flutter-app
-          cd ~/deploy/flutter-app
-          git clone https://github.com/example/flutter-app.git
-
-      - run: |
-          cp -r $GITHUB_WORKSPACE/build/windows/release/* ~/deploy/flutter-app/
-          cp -r $GITHUB_WORKSPACE/build/web/release/* ~/deploy/flutter-app/
-
-      - run: |
-          cd ~/deploy/flutter-app
-          git add .
-          git commit -m "Deployed tag v${GITHUB_REF##refs/tags/}"
-          git push
-
-  release:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-gitlab@v1
-      - run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-
-      - run: |
-          gitlab-ci-multi-runner register
-          gitlab-ci-multi-runner exec docker --docker-image=gitlab/gitlab-runner:latest --entrypoint /bin/sh -c "echo 'RELEASED' > .gitlab-ci.yml"
-
-      - run: |
-          git add .gitlab-ci.yml
-          git commit -m "Release v${GITHUB_REF##refs/tags/}"
-          git push
+      - run: flutter format --set-exit-if-changed .
+      - run: flutter analyze .
+      - run: flutter build apk
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
