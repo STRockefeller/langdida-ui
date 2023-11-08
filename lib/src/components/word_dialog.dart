@@ -35,6 +35,8 @@ class _WordDialogState extends State<WordDialog> {
         },
       );
     } catch (e) {
+      // todo: fix the warning
+      // ignore: use_build_context_synchronously
       showFlashMessage(context, e.toString());
       _upsertButton = TextButton(
         child: const Text("Create Card"),
