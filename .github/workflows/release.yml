@@ -2,9 +2,8 @@ name: Flutter CI
 
 on:
   push:
-    branches:
-      - master
-      - release-action
+    tags:
+      - '*'
 
 jobs:
   build:
