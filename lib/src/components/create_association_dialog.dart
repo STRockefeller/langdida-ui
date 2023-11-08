@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/utils/connections.dart';
@@ -97,7 +98,9 @@ class _CreateAssociationDialogState extends State<CreateAssociationDialog> {
           actions: [
             TextButton(
                 onPressed: () {
-                  print(_secondTarget.name);
+                  if (kDebugMode) {
+                    print(_secondTarget.name);
+                  }
                   Connections.createCardAssociations(
                       CreateAssociationConditions(
                           cardIndex: widget._firstTarget,

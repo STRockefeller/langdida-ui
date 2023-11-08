@@ -16,12 +16,11 @@ class ServerAddressInput extends StatelessWidget {
       // connect to the server
       Connections.isConnected().then((ok) => {
             if (ok)
-              {
-                showFlashMessage(context, "Connected to $serverAddress")
-              }
+              {showFlashMessage(context, "Connected to $serverAddress")}
             else
               {
-                showFlashMessage(context, "Failed to connected to $serverAddress")
+                showFlashMessage(
+                    context, "Failed to connected to $serverAddress")
               }
           });
     }

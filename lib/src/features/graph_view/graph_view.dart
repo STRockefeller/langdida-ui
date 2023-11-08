@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/components/app_bar.dart';
 import 'package:langdida_ui/src/components/flash_message.dart';
 import 'package:langdida_ui/src/features/graph_view/animation.dart';

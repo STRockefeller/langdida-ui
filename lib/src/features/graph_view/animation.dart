@@ -5,12 +5,14 @@ import 'package:langdida_ui/src/api_models/card.dart';
 import 'package:langdida_ui/src/components/word_tab_dialog.dart';
 import 'package:langdida_ui/src/features/graph_view/point.dart';
 
+// todo: fix the warning
+// ignore: must_be_immutable
 class AnimatedCanvas extends StatefulWidget {
   List<CardIndex> cards;
   AnimatedCanvas({Key? key, required this.cards}) : super(key: key);
 
   @override
-  _AnimatedCanvasState createState() => _AnimatedCanvasState();
+  State<AnimatedCanvas> createState() => _AnimatedCanvasState();
 }
 
 class _AnimatedCanvasState extends State<AnimatedCanvas>

@@ -55,6 +55,8 @@ class _UploadPageState extends State<UploadPage> {
       }
       setState(() {});
     } else {
+      // todo: fix the warning
+      // ignore: use_build_context_synchronously
       showFlashMessage(context, "Canceled");
     }
   }

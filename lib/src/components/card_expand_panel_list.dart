@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/api_models/card.dart';
 
+// todo: fix the warning
+// ignore: must_be_immutable
 class CardExpansionPanelList extends StatefulWidget {
   final CardModel _card;
   final Function(CardModel newResponse) onValueChanged;
