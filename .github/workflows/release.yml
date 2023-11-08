@@ -3,11 +3,11 @@ name: Flutter CI
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -16,12 +16,12 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v1
         with:
-          java-version: '12.x'
+          java-version: "12.x"
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
         with:
-          channel: 'beta'
+          channel: "beta"
 
       - name: Get dependencies
         run: flutter pub get
@@ -70,17 +70,12 @@ jobs:
       - name: Upload Web artifact
         uses: actions/upload-release-asset@v1
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: build/web/
-            asset_name: LangDiDa.zip
-            asset_content_type: application/zip
-
-      - name: Set up Windows VM
-        uses: actions/setup-windows@v2
-        with:
-          vmImage: 'windows-latest'
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/web/
+          asset_name: LangDiDa.zip
+          asset_content_type: application/zip
 
       - name: Build Windows Form app
         run: flutter build windows
@@ -94,5 +89,3 @@ jobs:
           asset_path: build/windows/runner/Release/MyApp.exe
           asset_name: LangDiDa.exe
           asset_content_type: application/octet-stream
-
-
