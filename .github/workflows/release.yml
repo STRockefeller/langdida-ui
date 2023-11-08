@@ -90,6 +90,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/windows/runner/Release/MyApp.exe
+          asset_path: build/windows/runner/Release/langdida_ui.exe
           asset_name: LangDiDa.exe
           asset_content_type: application/octet-stream
