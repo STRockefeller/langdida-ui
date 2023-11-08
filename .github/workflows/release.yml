@@ -1,0 +1,58 @@
+name: Deploy and release on tag
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-flutter@v1
+      - run: flutter pub get
+      - run: flutter build windows
+      - run: flutter build web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ssh@v2
+      - run: |
+          ssh -T git@example.com
+          mkdir -p ~/deploy/flutter-app
+          cd ~/deploy/flutter-app
+          git clone https://github.com/example/flutter-app.git
+
+      - run: |
+          cp -r $GITHUB_WORKSPACE/build/windows/release/* ~/deploy/flutter-app/
+          cp -r $GITHUB_WORKSPACE/build/web/release/* ~/deploy/flutter-app/
+
+      - run: |
+          cd ~/deploy/flutter-app
+          git add .
+          git commit -m "Deployed tag v${GITHUB_REF##refs/tags/}"
+          git push
+
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-gitlab@v1
+      - run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
+      - run: |
+          gitlab-ci-multi-runner register
+          gitlab-ci-multi-runner exec docker --docker-image=gitlab/gitlab-runner:latest --entrypoint /bin/sh -c "echo 'RELEASED' > .gitlab-ci.yml"
+
+      - run: |
+          git add .gitlab-ci.yml
+          git commit -m "Release v${GITHUB_REF##refs/tags/}"
+          git push
