@@ -35,7 +35,7 @@ class _WordTabDialogState extends State<WordTabDialog> {
             width: 275,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Color.fromARGB(255, 108, 108, 223)),
+                color: const Color.fromARGB(255, 108, 108, 223)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:langdida_ui/src/features/book/book.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,7 +10,9 @@ void main() async {
   await GetStorage.init();
   final box = GetStorage();
   box.listenKey("server_address", (value) {
-    print("server_address changed to $value");
+    if (kDebugMode) {
+      print("server_address changed to $value");
+    }
   });
   runApp(MyApp());
 }
