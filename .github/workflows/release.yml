@@ -69,7 +69,7 @@ jobs:
 
       - name: Compress Web app
         run: |
-          Compress-Archive -Path build/web/* -DestinationPath build/LangDiDa.zip
+          Compress-Archive -Path build/web/* -DestinationPath build/LangDiDaWeb.zip
 
       - name: Upload Web artifact
         uses: actions/upload-release-asset@v1
@@ -77,12 +77,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/LangDiDa.zip
-          asset_name: LangDiDa.zip
+          asset_path: build/LangDiDaWeb.zip
+          asset_name: LangDiDaWeb.zip
           asset_content_type: application/zip
 
       - name: Build Windows Form app
         run: flutter build windows
+
+      - name: Compress Windows app
+        run: |
+          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath build/LangDiDaWin64.zip
 
       - name: Upload Windows Form artifact
         uses: actions/upload-release-asset@v1
@@ -90,6 +94,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/windows/x64/runner/Release/langdida_ui.exe
-          asset_name: LangDiDa.exe
-          asset_content_type: application/octet-stream
+          asset_path: build/LangDiDaWin64.zip
+          asset_name: LangDiDaWin64.zip
+          asset_content_type: application/zip
