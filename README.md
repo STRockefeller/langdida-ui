@@ -50,8 +50,8 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
 
 ## Screenshots
 
-![table](https://i.imgur.com/MZvbrBb.png)
+![phone](./assets/images/sample/shots_so_phone.png)
 
-![graph](https://i.imgur.com/pOcdFtU.png)
+![win](./assets/images/sample/shots_so_win.png)
 
-![dialog](https://i.imgur.com/v6BvUkF.png)
+![chrome](./assets/images/sample/shots_so_chrome.png)
