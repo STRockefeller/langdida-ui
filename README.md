@@ -1,5 +1,7 @@
 # langdida-ui
 
+![logo](/assets/images/logo/LangDiDa_logo.png)
+
 langdida-ui is a front-end project designed to be used with langdida-server. langdida is a "personal use" language learning tool that I created based on my reference to lingQ. (lingQ is a great language learning platform, but some of its designs did not completely meet my needs, so I decided to create my own language learning tool.)
 
 The UI is designed using flutter and is expected to support the following platforms:
