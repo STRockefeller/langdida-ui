@@ -74,38 +74,97 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: newLangDiDaAppBar("Upload", context),
-      body: Column(
-        children: [
-          TextField(
-            controller: _urlController,
-            decoration: const InputDecoration(
-              labelText: 'Enter URL',
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(255, 208, 185, 241),
+              Color.fromARGB(255, 230, 214, 251)
+            ],
           ),
-          ElevatedButton(
-            onPressed: _sendUrlToApi,
-            child: const Text('New Lesson from URL'),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _urlController,
+                decoration: const InputDecoration(
+                  labelText: 'Enter URL',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: _sendUrlToApi,
+                    icon: const Icon(Icons.link),
+                    label: const Text('New Lesson from URL'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5E35B1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      shadowColor: Colors.black,
+                      elevation: 8,
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: _selectFile,
+                    icon: const Icon(Icons.file_upload),
+                    label: const Text('Select Local File'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF43A047),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      shadowColor: Colors.black,
+                      elevation: 8,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Container(
+                height: 100,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    _fileContent.isEmpty
+                        ? 'ContentsPreview'
+                        : 'File content: $_fileContent',
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () => _openBook(_fileContent),
+                icon: const Icon(Icons.book),
+                label: const Text('New Lesson from the File'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFD81B60),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  shadowColor: Colors.black,
+                  elevation: 8,
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: _selectFile,
-            child: const Text('Select File'),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            height: 100,
-            width: double.infinity,
-            color: Colors.grey[300],
-            child: Center(
-              child: Text(_fileContent.isEmpty
-                  ? 'ContentsPreview'
-                  : 'File content: $_fileContent'),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => _openBook(_fileContent),
-            child: const Text('New Lesson from the File'),
-          ),
-        ],
+        ),
       ),
     );
   }
